@@ -2,6 +2,7 @@ import pandas as pd
 import re
 from pathlib import Path
 import streamlit as st
+import gdown
 
 st.title("Manifest Master Dashboard")
 
@@ -281,6 +282,18 @@ if hub_mapping_flag == "Yes":
             st.write(f"An error occurred during processing: {e}")
 
 st.divider()
+# Google Drive file ID
+
+url = "https://drive.google.com/file/d/1Q6sv_YcG0Q5Io0tSZksIozp_7D_XzqlU/view?usp=drive_link"
+
+# Download locally (optional)
+gdown.download(url, "data_manifest_rule_v1.csv", quiet=False)
+
+# Load into pandas directly if it's a CSV
+df = pd.read_csv("data_manifest_rule_v1.csv")
+st.write("File Read kar li maine")
+st.write(df.head())
+
 
 
 
