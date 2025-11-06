@@ -3,3 +3,4 @@ regex
 pathlib
 streamlit
 openpyxl
+gdown
