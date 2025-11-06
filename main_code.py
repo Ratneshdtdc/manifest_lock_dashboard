@@ -11,6 +11,7 @@ st.title("Manifest Master Dashboard")
 
 # === READ OD HUB MAPPING ===
 od_df = pd.read_excel("OD_Hub_Mapping.xlsx")
+st.dataframe(od_df)
 od_df.columns = od_df.columns.str.strip()
 
 # Helper: normalized column keys for fuzzy lookup
