@@ -12,7 +12,7 @@ st.title("Manifest Master Dashboard")
 # === READ OD HUB MAPPING ===
 hub_mapping_flag = st.radio(
         "Has Hub Mapping Changed?",
-        ["Yes", "No", "Maybe, I donno"],
+        ["No", "Yes", "Maybe, I donno"],
 
     )
 
