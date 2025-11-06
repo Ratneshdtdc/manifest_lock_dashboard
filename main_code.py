@@ -17,7 +17,7 @@ hub_mapping_flag = st.radio(
     )
 
 
-if hub_mapping_flag = "No": 
+if hub_mapping_flag == "No": 
         od_df = pd.read_excel("OD_Hub_Mapping.xlsx")
         od_df.columns = od_df.columns.str.strip()
         
@@ -279,6 +279,6 @@ if hub_mapping_flag = "No":
             st.write(f"Error: Input CSV file not found at path. Please ensure the file exists.")
         except Exception as e:
             st.write(f"An error occurred during processing: {e}")
-elif hub_mapping_flag = "Yes":
+elif hub_mapping_flag == "Yes":
     st.write("Yaha Aaya")
 
