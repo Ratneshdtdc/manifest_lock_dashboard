@@ -6,11 +6,11 @@ import streamlit as st
 st.title("Manifest Master Dashboard")
 
 # === CONFIG ===
-input_path = Path("/content/drive/MyDrive/Manifest Lock/OD_Hub_Mapping.xlsx")
-output_path = Path("/content/drive/MyDrive/Manifest Lock/Final_Manifest_Rules_2_with mode.csv")
+#input_path = Path("/content/drive/MyDrive/Manifest Lock/OD_Hub_Mapping.xlsx")
+#output_path = Path("/content/drive/MyDrive/Manifest Lock/Final_Manifest_Rules_2_with mode.csv")
 
 # === READ OD HUB MAPPING ===
-od_df = pd.read_excel(input_path)
+od_df = pd.read_excel("OD_Hub_Mapping.xlsx")
 od_df.columns = od_df.columns.str.strip()
 
 # Helper: normalized column keys for fuzzy lookup
