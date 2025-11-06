@@ -13,7 +13,7 @@ st.title("Manifest Master Dashboard")
 od_df = pd.read_excel("OD_Hub_Mapping.xlsx")
 od_df.columns = od_df.columns.str.strip()
 
-st.write("Yaha tak hua hai")
+# st.write("Yaha tak hua hai")
 
 # Helper: normalized column keys for fuzzy lookup
 def normalize(col_name: str) -> str:
@@ -166,6 +166,8 @@ def find_column_for_rule_label(label, normalized_cols):
 records = []
 missing_mappings = set()
 
+
+
 for idx, od in od_df.iterrows():
     origin = od.get("Origin Branch")
     dest = od.get("Destination Branch")
@@ -217,11 +219,12 @@ for idx, od in od_df.iterrows():
         })
 
 # report missing mappings
-if missing_mappings:
-    print("⚠️ Some rule-labels couldn't be mapped to columns in the input file (samples):")
-    for i, mm in enumerate(list(missing_mappings)[:10], 1):
-        print(f"  {i}. {mm}")
-    print("Check OD_Hub_Mapping.xlsx headers for typos or mismatched names.")
+#if missing_mappings:
+    #st.write("⚠️ Some rule-labels couldn't be mapped to columns in the input file (samples):")
+    #for i, mm in enumerate(list(missing_mappings)[:10], 1):
+        
+        #print(f"  {i}. {mm}")
+    #print("Check OD_Hub_Mapping.xlsx headers for typos or mismatched names.")
 
 # Final dataframe
 final_df = pd.DataFrame(records)
@@ -230,7 +233,42 @@ final_df = final_df[
     (final_df["Bag Origin"] != final_df["packet/bag destination"])
 ].reset_index(drop=True)
 
-final_df.to_csv(output_path, index=False)
-print(f"✅ Finished. Final manifest saved to: {output_path}")
-print(f"Total rows: {len(final_df):,}")
+final_df.to_csv("Final_Manifest_Rules_2_with mode.csv", index=False)
+st.write(f"Finished. Final manifest created & saved!")
+st.write(f"Total rows: {len(final_df):,}")
+
+
+# Define the path to the input CSV file
+#input_csv_path = "/content/drive/MyDrive/Manifest Lock/Final_Manifest_Rules_2_with mode.csv"
+
+# Read the CSV file into a DataFrame
+try:
+    final_df_from_csv = final_df.copy()
+    #print(f"Successfully loaded data from: {input_csv_path}")
+    #print(f"Shape of loaded data: {final_df_from_csv.shape}")
+
+    # Define the columns to group by
+    group_cols = ["CN Origin", "CN Destination", "Bag Origin", "packet/bag destination", "Product", "Goods Type"]
+
+    # Define the aggregation function
+    def join_unique(x):
+        return "/".join(x.dropna().astype(str).unique()) # Ensure aggregation works on strings
+
+    # Group the DataFrame and apply the aggregation
+    # Ensure grouping columns exist in the loaded DataFrame
+    if all(col in final_df_from_csv.columns for col in group_cols):
+        concatenated_df1 = final_df_from_csv.groupby(group_cols).agg(join_unique).reset_index()
+
+        #output_path_concatenated1 = "/content/drive/MyDrive/Manifest Lock/Concatenated_Manifest_Rules_from_CSV.csv" # Changed output path
+        concatenated_df1.to_csv("Concatenated_Manifest_Rules.csv", index=False)
+        st.write(f"Concatenated DataFrame saved!")
+        st.write(f"The length of the concatenated DataFrame is: {len(concatenated_df1)}")
+
+    else:
+        st.write(f"Error: One or more grouping columns {group_cols} not found in the loaded CSV file.")
+
+except FileNotFoundError:
+    st.write(f"Error: Input CSV file not found at path. Please ensure the file exists.")
+except Exception as e:
+    st.write(f"An error occurred during processing: {e}")
 
